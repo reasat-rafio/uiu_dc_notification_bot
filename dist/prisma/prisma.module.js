@@ -6,23 +6,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BotService = void 0;
+exports.PrismaModule = void 0;
+const prisma_service_1 = require("./prisma.service");
 const common_1 = require("@nestjs/common");
-const config_1 = require("../config");
-const { defaultEmbed, alexWhitelist, preventWords } = config_1.default;
-let BotService = class BotService {
-    check(messages) {
-        const embed = messages.map((d) => defaultEmbed(config_1.default.colors.alerts)
-            .setTitle(d.title)
-            .setDescription(d.content)
-            .setTimestamp(d.createdDate)
-            .setURL(`https://www.uiu.ac.bd/notices/${d.slug}`)
-            .setAuthor('UIU', process.env.IMG_URL));
-        return embed;
-    }
+let PrismaModule = class PrismaModule {
 };
-BotService = __decorate([
-    (0, common_1.Injectable)()
-], BotService);
-exports.BotService = BotService;
-//# sourceMappingURL=bot.service.js.map
+PrismaModule = __decorate([
+    (0, common_1.Global)(),
+    (0, common_1.Module)({
+        providers: [prisma_service_1.PrismaService],
+        exports: [prisma_service_1.PrismaService],
+    })
+], PrismaModule);
+exports.PrismaModule = PrismaModule;
+//# sourceMappingURL=prisma.module.js.map

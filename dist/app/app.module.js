@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
+const prisma_module_1 = require("./../prisma/prisma.module");
 const scraping_module_1 = require("./../scraping/scraping.module");
 const bot_module_1 = require("../bot/bot.module");
 const common_1 = require("@nestjs/common");
@@ -19,6 +20,7 @@ AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             bot_module_1.BotModule,
+            prisma_module_1.PrismaModule,
             scraping_module_1.ScrapingModule,
             graphql_1.GraphQLModule.forRoot({
                 typePaths: ['./**/*.graphql'],

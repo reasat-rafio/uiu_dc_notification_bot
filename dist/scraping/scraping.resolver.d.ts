@@ -7,7 +7,6 @@ export declare class ScrapingResolver {
     create(createScrapingInput: CreateScraping): string;
     findAll(): string;
     scrapeAll(): Promise<void>;
-    findOne(): Promise<void>;
     update(updateScrapingInput: UpdateScrapingInput): string;
     remove(id: number): string;
 }

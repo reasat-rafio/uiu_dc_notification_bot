@@ -1,19 +1,24 @@
+import { PrismaService } from './../prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { NestCrawlerService } from 'nest-crawler';
 import { CreateScraping } from './dto/create-scraping.input';
 import { UpdateScrapingInput } from './dto/update-scraping.input';
 import slugify from 'slugify';
+import { Data } from '@prisma/client';
 
-interface Data {
+interface SData {
   title: string;
   content: string;
 }
 
 @Injectable()
 export class ScrapingService {
-  constructor(private readonly crawler: NestCrawlerService) {}
+  constructor(
+    private readonly crawler: NestCrawlerService,
+    private readonly prisma: PrismaService,
+  ) {}
 
-  formetData = (data: Data): CreateScraping[] => {
+  formetData = (data: SData): CreateScraping[] => {
     let title: string[] = [];
     let content: string[] = [];
     let slug: void | string[] = [];
@@ -27,9 +32,11 @@ export class ScrapingService {
     content = data.content.split('\n');
     slug = title.map((e: string): string => slugify(e.toLowerCase()));
 
-    title.map((e, index) => (result[index] = { ...result[index], title: e }));
+    title.map(
+      (e, index) => (result[index] = { ...result[index], title: e.trim() }),
+    );
     content.map(
-      (e, index) => (result[index] = { ...result[index], content: e }),
+      (e, index) => (result[index] = { ...result[index], content: e.trim() }),
     );
     slug.map((e, index) => (result[index] = { ...result[index], slug: e }));
 
@@ -44,7 +51,7 @@ export class ScrapingService {
   }
 
   async scrape(): Promise<void> {
-    const data: Data = await this.crawler.fetch({
+    const data: SData = await this.crawler.fetch({
       target: 'https://www.uiu.ac.bd/notices',
       fetch: {
         title: {
@@ -55,7 +62,26 @@ export class ScrapingService {
         },
       },
     });
-    const formetedData = this.formetData(data);
+
+    const formetedData: CreateScraping[] = this.formetData(data);
+
+    formetedData.map(async (e): Promise<Data> => {
+      const notificationExist = await this.prisma.data.findMany({
+        where: {
+          title: e.title,
+        },
+      });
+
+      if (!notificationExist.length) {
+        try {
+          return await this.prisma.data.create({
+            data: { title: e.title, content: e.content, slug: e.slug },
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    });
   }
 
   findAll() {

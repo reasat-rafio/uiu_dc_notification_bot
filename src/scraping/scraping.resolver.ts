@@ -17,13 +17,8 @@ export class ScrapingResolver {
     return this.scrapingService.findAll();
   }
 
-  @Query('scrape')
-  scrapeAll() {
-    return this.scrapingService.scrape();
-  }
-
-  @Query('scraping')
-  findOne() {
+  @Mutation('scrape')
+  scrapeAll(): Promise<void> {
     return this.scrapingService.scrape();
   }
 

@@ -1,6 +1,6 @@
 type ScrapData {
   title: String
-  info: String
+  slug: String
   content: String
 }
 
@@ -14,12 +14,12 @@ input UpdateScrapingInput {
 }
 
 type Query {
-  scrape: ScrapData
   scraping: ScrapData
   # scraping(id: Int!): ScrapData
 }
 
 type Mutation {
+  scrape: ScrapData
   createScraping(createScrapingInput: CreateScrapingInput!): ScrapData!
   updateScraping(updateScrapingInput: UpdateScrapingInput!): ScrapData!
   removeScraping(id: Int!): ScrapData

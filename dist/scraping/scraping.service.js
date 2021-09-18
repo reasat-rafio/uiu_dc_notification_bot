@@ -10,12 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ScrapingService = void 0;
+const prisma_service_1 = require("./../prisma/prisma.service");
 const common_1 = require("@nestjs/common");
 const nest_crawler_1 = require("nest-crawler");
 const slugify_1 = require("slugify");
 let ScrapingService = class ScrapingService {
-    constructor(crawler) {
+    constructor(crawler, prisma) {
         this.crawler = crawler;
+        this.prisma = prisma;
         this.formetData = (data) => {
             let title = [];
             let content = [];
@@ -27,8 +29,8 @@ let ScrapingService = class ScrapingService {
                 .filter((e) => e);
             content = data.content.split('\n');
             slug = title.map((e) => (0, slugify_1.default)(e.toLowerCase()));
-            title.map((e, index) => (result[index] = Object.assign(Object.assign({}, result[index]), { title: e })));
-            content.map((e, index) => (result[index] = Object.assign(Object.assign({}, result[index]), { content: e })));
+            title.map((e, index) => (result[index] = Object.assign(Object.assign({}, result[index]), { title: e.trim() })));
+            content.map((e, index) => (result[index] = Object.assign(Object.assign({}, result[index]), { content: e.trim() })));
             slug.map((e, index) => (result[index] = Object.assign(Object.assign({}, result[index]), { slug: e })));
             result.pop();
             return result;
@@ -50,6 +52,23 @@ let ScrapingService = class ScrapingService {
             },
         });
         const formetedData = this.formetData(data);
+        formetedData.map(async (e) => {
+            const notificationExist = await this.prisma.data.findMany({
+                where: {
+                    title: e.title,
+                },
+            });
+            if (!notificationExist.length) {
+                try {
+                    return await this.prisma.data.create({
+                        data: { title: e.title, content: e.content, slug: e.slug },
+                    });
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+        });
     }
     findAll() {
         return `This action returns all scraping`;
@@ -66,7 +85,8 @@ let ScrapingService = class ScrapingService {
 };
 ScrapingService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [nest_crawler_1.NestCrawlerService])
+    __metadata("design:paramtypes", [nest_crawler_1.NestCrawlerService,
+        prisma_service_1.PrismaService])
 ], ScrapingService);
 exports.ScrapingService = ScrapingService;
 //# sourceMappingURL=scraping.service.js.map

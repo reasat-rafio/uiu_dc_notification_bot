@@ -30,9 +30,6 @@ let ScrapingResolver = class ScrapingResolver {
     scrapeAll() {
         return this.scrapingService.scrape();
     }
-    findOne() {
-        return this.scrapingService.scrape();
-    }
     update(updateScrapingInput) {
         return this.scrapingService.update(updateScrapingInput.id, updateScrapingInput);
     }
@@ -54,17 +51,11 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ScrapingResolver.prototype, "findAll", null);
 __decorate([
-    (0, graphql_1.Query)('scrape'),
+    (0, graphql_1.Mutation)('scrape'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ScrapingResolver.prototype, "scrapeAll", null);
-__decorate([
-    (0, graphql_1.Query)('scraping'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], ScrapingResolver.prototype, "findOne", null);
 __decorate([
     (0, graphql_1.Mutation)('updateScraping'),
     __param(0, (0, graphql_1.Args)('updateScrapingInput')),

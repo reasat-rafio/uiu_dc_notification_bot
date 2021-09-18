@@ -54,12 +54,12 @@ exports.default = {
             'just',
         ],
     },
-    defaultEmbed: (color = '#0099ff') => {
+    defaultEmbed: (color = '#f68920') => {
         return new discord_js_1.MessageEmbed().setColor(color).setFooter('');
     },
     colors: {
         message: '#0099ff',
-        alerts: '#e84118',
+        alerts: '#f68920',
         system: '#4cd137',
         github: '#6f7c7d',
         users: '#ffc200',

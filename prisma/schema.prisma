@@ -10,11 +10,12 @@ generator client {
   provider = "prisma-client-js"
 }
 model Data {
-  id                Int            @id @default(autoincrement())
+  id                Int            @id              @default(autoincrement())
   title             String
-  description       String
+  content           String
   slug              String
-  createdDate       DateTime  @default(now()) @map("created_date")
+  createdDate       DateTime      @default(now())   @map("created_date")
 
+  @@index([title])
   @@map("data")
 }

@@ -59,12 +59,12 @@ export default {
     ],
   },
 
-  defaultEmbed: (color = '#0099ff') => {
+  defaultEmbed: (color = '#f68920') => {
     return new MessageEmbed().setColor(color).setFooter('');
   },
   colors: {
     message: '#0099ff',
-    alerts: '#e84118',
+    alerts: '#f68920',
     system: '#4cd137',
     github: '#6f7c7d',
     users: '#ffc200',

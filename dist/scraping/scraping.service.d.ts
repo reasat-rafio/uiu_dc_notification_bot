@@ -1,14 +1,16 @@
+import { PrismaService } from './../prisma/prisma.service';
 import { NestCrawlerService } from 'nest-crawler';
 import { CreateScraping } from './dto/create-scraping.input';
 import { UpdateScrapingInput } from './dto/update-scraping.input';
-interface Data {
+interface SData {
     title: string;
     content: string;
 }
 export declare class ScrapingService {
     private readonly crawler;
-    constructor(crawler: NestCrawlerService);
-    formetData: (data: Data) => CreateScraping[];
+    private readonly prisma;
+    constructor(crawler: NestCrawlerService, prisma: PrismaService);
+    formetData: (data: SData) => CreateScraping[];
     create(createScrapingInput: CreateScraping): string;
     scrape(): Promise<void>;
     findAll(): string;
