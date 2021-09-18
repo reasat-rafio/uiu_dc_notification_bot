@@ -18,6 +18,13 @@ export class BotHandler {
     await message.reply(`Returning you the recent notification`);
   }
 
+  @OnCommand({ name: 'gethim' })
+  async razibRoast(message: Message): Promise<void> {
+    await message.reply(
+      `Rajib bhai khay luchi, @Realest#1696 er mukhe @Dank Memer#5192 er bichi`,
+    );
+  }
+
   @OnCommand({ name: 'last5' })
   async last5Notification(message: Message): Promise<void> {
     await message.reply(`Returning you the last5 notification`);

@@ -1,0 +1,26 @@
+type ScrapData {
+  title: String
+  info: String
+  content: String
+}
+
+input CreateScrapingInput {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input UpdateScrapingInput {
+  id: Int!
+}
+
+type Query {
+  scrape: ScrapData
+  scraping: ScrapData
+  # scraping(id: Int!): ScrapData
+}
+
+type Mutation {
+  createScraping(createScrapingInput: CreateScrapingInput!): ScrapData!
+  updateScraping(updateScrapingInput: UpdateScrapingInput!): ScrapData!
+  removeScraping(id: Int!): ScrapData
+}
