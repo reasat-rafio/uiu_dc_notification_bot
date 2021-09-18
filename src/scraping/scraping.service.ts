@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { NestCrawlerService } from 'nest-crawler';
-import { CreateScrapingInput } from './dto/create-scraping.input';
+import { CreateScraping } from './dto/create-scraping.input';
 import { UpdateScrapingInput } from './dto/update-scraping.input';
 import slugify from 'slugify';
 
@@ -9,15 +9,11 @@ interface Data {
   content: string;
 }
 
-interface DataWithSlugLink extends Data {
-  slug: string;
-}
-
 @Injectable()
 export class ScrapingService {
   constructor(private readonly crawler: NestCrawlerService) {}
 
-  formetData = (data: Data): DataWithSlugLink[] => {
+  formetData = (data: Data): CreateScraping[] => {
     let title: string[] = [];
     let content: string[] = [];
     let slug: void | string[] = [];
@@ -43,7 +39,7 @@ export class ScrapingService {
     return result;
   };
 
-  create(createScrapingInput: CreateScrapingInput) {
+  create(createScrapingInput: CreateScraping) {
     return 'This action adds a new scraping';
   }
 
@@ -59,7 +55,6 @@ export class ScrapingService {
         },
       },
     });
-
     const formetedData = this.formetData(data);
   }
 

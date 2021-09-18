@@ -1,0 +1,1 @@
+{"version":3,"file":"scraping.module.js","sourceRoot":"","sources":["../../src/scraping/scraping.module.ts"],"names":[],"mappings":";;;;;;;;;AAAA,2CAAwC;AACxC,yDAAqD;AACrD,2DAAuD;AACvD,+CAAiD;AAMjD,IAAa,cAAc,GAA3B,MAAa,cAAc;CAAG,CAAA;AAAjB,cAAc;IAJ1B,IAAA,eAAM,EAAC;QACN,OAAO,EAAE,CAAC,gCAAiB,CAAC;QAC5B,SAAS,EAAE,CAAC,oCAAgB,EAAE,kCAAe,CAAC;KAC/C,CAAC;GACW,cAAc,CAAG;AAAjB,wCAAc"}

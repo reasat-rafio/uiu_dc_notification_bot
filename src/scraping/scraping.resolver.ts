@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { ScrapingService } from './scraping.service';
-import { CreateScrapingInput } from './dto/create-scraping.input';
+import { CreateScraping } from './dto/create-scraping.input';
 import { UpdateScrapingInput } from './dto/update-scraping.input';
 
 @Resolver('Scraping')
@@ -8,9 +8,7 @@ export class ScrapingResolver {
   constructor(private readonly scrapingService: ScrapingService) {}
 
   @Mutation('createScraping')
-  create(
-    @Args('createScrapingInput') createScrapingInput: CreateScrapingInput,
-  ) {
+  create(@Args('createScrapingInput') createScrapingInput: CreateScraping) {
     return this.scrapingService.create(createScrapingInput);
   }
 
