@@ -1,36 +1,53 @@
 import { PrismaService } from './../prisma/prisma.service';
 import { Injectable, Logger } from '@nestjs/common';
-import { DiscordClientProvider, Once, OnCommand } from 'discord-nestjs';
-import { Message } from 'discord.js';
-import config from '../config';
+import {
+  Client,
+  ClientProvider,
+  Content,
+  DiscordClientProvider,
+  On,
+  Once,
+  OnCommand,
+} from 'discord-nestjs';
+import { Message, TextChannel } from 'discord.js';
+
 import { BotService } from './bot.service';
-const { defaultEmbed, alexWhitelist, preventWords } = config;
+import { ScrapingService } from 'src/scraping/scraping.service';
+import { Cron } from '@nestjs/schedule';
+import { Context, Mutation } from '@nestjs/graphql';
 
 @Injectable()
 export class BotHandler {
   private readonly logger = new Logger(BotHandler.name);
   constructor(
-    private readonly discordProvider: DiscordClientProvider,
     private readonly prisma: PrismaService,
     private readonly botservice: BotService,
   ) {}
+
+  @Client()
+  discordProvider: ClientProvider;
+
   @Once({ event: 'ready' })
-  onReady(): void {
-    this.logger.log(
-      `Logged in as ${this.discordProvider.getClient().user.tag}!`,
-    );
+  start(): void {
+    this.logger.log(`Logged in as `);
+  }
+
+  @On({ event: 'ready' })
+  @Cron('5 * * * * *')
+  @Mutation('scrape')
+  async scrapeAll() {
+    return this.botservice.scrape();
   }
 
   @OnCommand({ name: 'recent' })
   async recentNotification(message: Message): Promise<void> {
-    await message.reply(`Returning you the recent notification`);
-  }
+    if (message.author.bot) {
+      return;
+    }
+    const recentNotification = await this.prisma.data.findFirst({ take: 1 });
+    const embdData = this.botservice.check(recentNotification);
 
-  @OnCommand({ name: 'gethim' })
-  async razibRoast(message: Message): Promise<void> {
-    await message.reply(
-      `Rajib bhai khay luchi, @Realest#1696 er mukhe @Dank Memer#5192 er bichi`,
-    );
+    await message.channel.send(embdData);
   }
 
   @OnCommand({ name: 'last5' })
@@ -39,7 +56,7 @@ export class BotHandler {
       return;
     }
     const data = await this.prisma.data.findMany({ take: 5 });
-    const embdData = this.botservice.check(data);
+    const embdData = this.botservice.checkMany(data);
     embdData.map(async (e) => await message.channel.send(e));
   }
 
@@ -49,7 +66,7 @@ export class BotHandler {
       return;
     }
     const data = await this.prisma.data.findMany({ take: 10 });
-    const embdData = this.botservice.check(data);
+    const embdData = this.botservice.checkMany(data);
     embdData.map(async (e) => await message.channel.send(e));
   }
 }

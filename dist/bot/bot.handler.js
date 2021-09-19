@@ -15,31 +15,36 @@ const prisma_service_1 = require("./../prisma/prisma.service");
 const common_1 = require("@nestjs/common");
 const discord_nestjs_1 = require("discord-nestjs");
 const discord_js_1 = require("discord.js");
-const config_1 = require("../config");
 const bot_service_1 = require("./bot.service");
-const { defaultEmbed, alexWhitelist, preventWords } = config_1.default;
+const scraping_service_1 = require("../scraping/scraping.service");
+const schedule_1 = require("@nestjs/schedule");
+const graphql_1 = require("@nestjs/graphql");
 let BotHandler = BotHandler_1 = class BotHandler {
-    constructor(discordProvider, prisma, botservice) {
-        this.discordProvider = discordProvider;
+    constructor(prisma, botservice) {
         this.prisma = prisma;
         this.botservice = botservice;
         this.logger = new common_1.Logger(BotHandler_1.name);
     }
-    onReady() {
-        this.logger.log(`Logged in as ${this.discordProvider.getClient().user.tag}!`);
+    start() {
+        this.logger.log(`Logged in as `);
+    }
+    async scrapeAll() {
+        return this.botservice.scrape();
     }
     async recentNotification(message) {
-        await message.reply(`Returning you the recent notification`);
-    }
-    async razibRoast(message) {
-        await message.reply(`Rajib bhai khay luchi, @Realest#1696 er mukhe @Dank Memer#5192 er bichi`);
+        if (message.author.bot) {
+            return;
+        }
+        const recentNotification = await this.prisma.data.findFirst({ take: 1 });
+        const embdData = this.botservice.check(recentNotification);
+        await message.channel.send(embdData);
     }
     async last5Notification(message) {
         if (message.author.bot) {
             return;
         }
         const data = await this.prisma.data.findMany({ take: 5 });
-        const embdData = this.botservice.check(data);
+        const embdData = this.botservice.checkMany(data);
         embdData.map(async (e) => await message.channel.send(e));
     }
     async last10Notification(message) {
@@ -47,28 +52,34 @@ let BotHandler = BotHandler_1 = class BotHandler {
             return;
         }
         const data = await this.prisma.data.findMany({ take: 10 });
-        const embdData = this.botservice.check(data);
+        const embdData = this.botservice.checkMany(data);
         embdData.map(async (e) => await message.channel.send(e));
     }
 };
+__decorate([
+    (0, discord_nestjs_1.Client)(),
+    __metadata("design:type", Object)
+], BotHandler.prototype, "discordProvider", void 0);
 __decorate([
     (0, discord_nestjs_1.Once)({ event: 'ready' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], BotHandler.prototype, "onReady", null);
+], BotHandler.prototype, "start", null);
+__decorate([
+    (0, discord_nestjs_1.On)({ event: 'ready' }),
+    (0, schedule_1.Cron)('5 * * * * *'),
+    (0, graphql_1.Mutation)('scrape'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BotHandler.prototype, "scrapeAll", null);
 __decorate([
     (0, discord_nestjs_1.OnCommand)({ name: 'recent' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [discord_js_1.Message]),
     __metadata("design:returntype", Promise)
 ], BotHandler.prototype, "recentNotification", null);
-__decorate([
-    (0, discord_nestjs_1.OnCommand)({ name: 'gethim' }),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [discord_js_1.Message]),
-    __metadata("design:returntype", Promise)
-], BotHandler.prototype, "razibRoast", null);
 __decorate([
     (0, discord_nestjs_1.OnCommand)({ name: 'last5' }),
     __metadata("design:type", Function),
@@ -83,8 +94,7 @@ __decorate([
 ], BotHandler.prototype, "last10Notification", null);
 BotHandler = BotHandler_1 = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [discord_nestjs_1.DiscordClientProvider,
-        prisma_service_1.PrismaService,
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         bot_service_1.BotService])
 ], BotHandler);
 exports.BotHandler = BotHandler;

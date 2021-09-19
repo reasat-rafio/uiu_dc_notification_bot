@@ -14,6 +14,7 @@ const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const graphql_1 = require("@nestjs/graphql");
+const schedule_1 = require("@nestjs/schedule");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -22,6 +23,7 @@ AppModule = __decorate([
             bot_module_1.BotModule,
             prisma_module_1.PrismaModule,
             scraping_module_1.ScrapingModule,
+            schedule_1.ScheduleModule.forRoot(),
             graphql_1.GraphQLModule.forRoot({
                 typePaths: ['./**/*.graphql'],
             }),

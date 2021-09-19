@@ -5,12 +5,14 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     BotModule,
     PrismaModule,
     ScrapingModule,
+    ScheduleModule.forRoot(),
     GraphQLModule.forRoot({
       typePaths: ['./**/*.graphql'],
     }),

@@ -14,6 +14,7 @@ const prisma_service_1 = require("./../prisma/prisma.service");
 const common_1 = require("@nestjs/common");
 const nest_crawler_1 = require("nest-crawler");
 const slugify_1 = require("slugify");
+const discord_nestjs_1 = require("discord-nestjs");
 let ScrapingService = class ScrapingService {
     constructor(crawler, prisma) {
         this.crawler = crawler;
@@ -83,6 +84,10 @@ let ScrapingService = class ScrapingService {
         return `This action removes a #${id} scraping`;
     }
 };
+__decorate([
+    (0, discord_nestjs_1.Client)(),
+    __metadata("design:type", Object)
+], ScrapingService.prototype, "discordProvider", void 0);
 ScrapingService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [nest_crawler_1.NestCrawlerService,

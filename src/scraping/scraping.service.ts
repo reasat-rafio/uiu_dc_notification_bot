@@ -1,3 +1,4 @@
+import { Message } from 'discord.js';
 import { PrismaService } from './../prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { NestCrawlerService } from 'nest-crawler';
@@ -5,6 +6,7 @@ import { CreateScraping } from './dto/create-scraping.input';
 import { UpdateScrapingInput } from './dto/update-scraping.input';
 import slugify from 'slugify';
 import { Data } from '@prisma/client';
+import { Client, ClientProvider, On } from 'discord-nestjs';
 
 interface SData {
   title: string;
@@ -17,6 +19,9 @@ export class ScrapingService {
     private readonly crawler: NestCrawlerService,
     private readonly prisma: PrismaService,
   ) {}
+
+  @Client()
+  discordProvider: ClientProvider;
 
   formetData = (data: SData): CreateScraping[] => {
     let title: string[] = [];

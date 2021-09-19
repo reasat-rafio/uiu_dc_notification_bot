@@ -2,6 +2,7 @@ import { PrismaService } from './../prisma/prisma.service';
 import { NestCrawlerService } from 'nest-crawler';
 import { CreateScraping } from './dto/create-scraping.input';
 import { UpdateScrapingInput } from './dto/update-scraping.input';
+import { ClientProvider } from 'discord-nestjs';
 interface SData {
     title: string;
     content: string;
@@ -10,6 +11,7 @@ export declare class ScrapingService {
     private readonly crawler;
     private readonly prisma;
     constructor(crawler: NestCrawlerService, prisma: PrismaService);
+    discordProvider: ClientProvider;
     formetData: (data: SData) => CreateScraping[];
     create(createScrapingInput: CreateScraping): string;
     scrape(): Promise<void>;

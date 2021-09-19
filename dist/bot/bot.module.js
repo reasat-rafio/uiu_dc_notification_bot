@@ -13,11 +13,15 @@ const common_1 = require("@nestjs/common");
 const discord_nestjs_1 = require("discord-nestjs");
 const config_1 = require("@nestjs/config");
 const bot_service_1 = require("./bot.service");
+const scraping_service_1 = require("../scraping/scraping.service");
+const scraping_resolver_1 = require("../scraping/scraping.resolver");
+const nest_crawler_1 = require("nest-crawler");
 let BotModule = class BotModule {
 };
 BotModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            nest_crawler_1.NestCrawlerModule,
             discord_nestjs_1.DiscordModule.forRootAsync({ useClass: discord_config_service_1.DiscordConfigService }),
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
