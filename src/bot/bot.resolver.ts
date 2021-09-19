@@ -22,10 +22,9 @@ export class BotHandler {
     this.logger.log(`Logged in`);
   }
 
-  // @Cron('0 */30 * * * *')
   // @Cron('5 * * * * *')
   @On({ event: 'ready' })
-  @Cron('5 * * * * *')
+  @Cron('0 */30 * * * *')
   @Mutation('scrape')
   async scrapeAll() {
     return this.botservice.scrape();
