@@ -24,50 +24,23 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+A dedicated discord bot for uiu students. The idea is simple, this bot will notify you on the chat when ever there is a new notice from the authority.
 
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
+## Prefix
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+--
 ```
 
-## Test
+## Commands
 
 ```bash
-# unit tests
-$ npm run test
+# get the last notification
+--recent
 
-# e2e tests
-$ npm run test:e2e
+# get the last 5 notifications
+--last5
 
-# test coverage
-$ npm run test:cov
+# get the last 10 notifications
+--last10
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
