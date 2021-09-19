@@ -1,0 +1,17 @@
+type ScrapData {
+  title: String
+  slug: String
+  content: String
+}
+
+input UpdateScrapingInput {
+  id: Int!
+}
+
+type Query {
+  scraping: ScrapData
+}
+
+type Mutation {
+  scrape: ScrapData
+}

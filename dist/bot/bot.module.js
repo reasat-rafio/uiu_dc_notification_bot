@@ -8,13 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BotModule = void 0;
 const discord_config_service_1 = require("./environment/discord-config.service");
-const bot_handler_1 = require("./bot.handler");
+const bot_resolver_1 = require("./bot.resolver");
 const common_1 = require("@nestjs/common");
 const discord_nestjs_1 = require("discord-nestjs");
 const config_1 = require("@nestjs/config");
 const bot_service_1 = require("./bot.service");
-const scraping_service_1 = require("../scraping/scraping.service");
-const scraping_resolver_1 = require("../scraping/scraping.resolver");
 const nest_crawler_1 = require("nest-crawler");
 let BotModule = class BotModule {
 };
@@ -27,7 +25,7 @@ BotModule = __decorate([
                 isGlobal: true,
             }),
         ],
-        providers: [bot_handler_1.BotHandler, discord_config_service_1.DiscordConfigService, bot_service_1.BotService],
+        providers: [bot_resolver_1.BotHandler, discord_config_service_1.DiscordConfigService, bot_service_1.BotService],
     })
 ], BotModule);
 exports.BotModule = BotModule;

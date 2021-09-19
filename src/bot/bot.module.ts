@@ -1,11 +1,9 @@
 import { DiscordConfigService } from './environment/discord-config.service';
-import { BotHandler } from './bot.handler';
+import { BotHandler } from './bot.resolver';
 import { Module } from '@nestjs/common';
 import { DiscordModule } from 'discord-nestjs';
 import { ConfigModule } from '@nestjs/config';
 import { BotService } from './bot.service';
-import { ScrapingService } from 'src/scraping/scraping.service';
-import { ScrapingResolver } from 'src/scraping/scraping.resolver';
 import { NestCrawlerModule } from 'nest-crawler';
 
 @Module({

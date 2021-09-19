@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ScrapingResolver = void 0;
 const graphql_1 = require("@nestjs/graphql");
@@ -41,7 +42,7 @@ __decorate([
     (0, graphql_1.Mutation)('createScraping'),
     __param(0, (0, graphql_1.Args)('createScrapingInput')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_scraping_input_1.CreateScraping]),
+    __metadata("design:paramtypes", [typeof (_a = typeof create_scraping_input_1.CreateScraping !== "undefined" && create_scraping_input_1.CreateScraping) === "function" ? _a : Object]),
     __metadata("design:returntype", void 0)
 ], ScrapingResolver.prototype, "create", null);
 __decorate([

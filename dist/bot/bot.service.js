@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BotService = void 0;
 const common_1 = require("@nestjs/common");
-const create_scraping_input_1 = require("../scraping/dto/create-scraping.input");
 const config_1 = require("../config");
 const slugify_1 = require("slugify");
 const nest_crawler_1 = require("nest-crawler");
@@ -84,7 +83,6 @@ let BotService = class BotService {
                     });
                     this.discordProvider.getClient().guilds.cache.each(async (guild) => {
                         try {
-                            let msg;
                             const channels = guild.channels.cache
                                 .filter((channel) => {
                                 return (channel.type === 'text' &&

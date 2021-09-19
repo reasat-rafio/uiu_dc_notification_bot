@@ -1,9 +1,9 @@
 import { Data } from '.prisma/client';
 import { MessageEmbed } from 'discord.js';
-import { CreateScraping } from 'src/scraping/dto/create-scraping.input';
 import { NestCrawlerService } from 'nest-crawler';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DiscordClientProvider } from 'discord-nestjs';
+import { CreateScraping } from './dto/create-scraping.input';
 interface SData {
     title: string;
     content: string;

@@ -1,20 +1,10 @@
-import { PrismaService } from './../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  Client,
-  ClientProvider,
-  Content,
-  DiscordClientProvider,
-  On,
-  Once,
-  OnCommand,
-} from 'discord-nestjs';
-import { Message, TextChannel } from 'discord.js';
-
+import { Client, ClientProvider, On, Once, OnCommand } from 'discord-nestjs';
+import { Message } from 'discord.js';
 import { BotService } from './bot.service';
-import { ScrapingService } from 'src/scraping/scraping.service';
 import { Cron } from '@nestjs/schedule';
-import { Context, Mutation } from '@nestjs/graphql';
+import { Mutation } from '@nestjs/graphql';
 
 @Injectable()
 export class BotHandler {
@@ -29,9 +19,11 @@ export class BotHandler {
 
   @Once({ event: 'ready' })
   start(): void {
-    this.logger.log(`Logged in as `);
+    this.logger.log(`Logged in`);
   }
 
+  // @Cron('0 */30 * * * *')
+  // @Cron('5 * * * * *')
   @On({ event: 'ready' })
   @Cron('5 * * * * *')
   @Mutation('scrape')

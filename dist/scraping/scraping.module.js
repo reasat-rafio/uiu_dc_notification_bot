@@ -11,7 +11,7 @@ const common_1 = require("@nestjs/common");
 const scraping_service_1 = require("./scraping.service");
 const scraping_resolver_1 = require("./scraping.resolver");
 const nest_crawler_1 = require("nest-crawler");
-const bot_handler_1 = require("../bot/bot.handler");
+const bot_resolver_1 = require("../bot/bot.resolver");
 let ScrapingModule = class ScrapingModule {
 };
 ScrapingModule = __decorate([

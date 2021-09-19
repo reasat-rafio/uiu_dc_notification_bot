@@ -1,12 +1,12 @@
 import { Data } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import { CreateScraping } from 'src/scraping/dto/create-scraping.input';
+import { MessageEmbed, TextChannel } from 'discord.js';
 import config from '../config';
 import slugify from 'slugify';
 import { NestCrawlerService } from 'nest-crawler';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Client, DiscordClientProvider } from 'discord-nestjs';
+import { CreateScraping } from './dto/create-scraping.input';
 
 interface SData {
   title: string;
@@ -106,7 +106,6 @@ export class BotService {
 
           this.discordProvider.getClient().guilds.cache.each(async (guild) => {
             try {
-              let msg;
               const channels: any = guild.channels.cache
                 .filter((channel) => {
                   return (
