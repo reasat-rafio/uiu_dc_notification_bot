@@ -19,6 +19,9 @@ export class BotHandler {
 
   @Once({ event: 'ready' })
   start(): void {
+    console.log(
+      this.discordProvider.getClient().guilds.cache.map((g) => g.name),
+    );
     this.logger.log(`Logged in`);
   }
 
@@ -35,9 +38,8 @@ export class BotHandler {
     if (message.author.bot) {
       return;
     }
-    const recentNotification = await this.prisma.data.findFirst({ take: 1 });
+    const recentNotification = await this.prisma.data.findFirst({ take: -1 });
     const embdData = this.botservice.check(recentNotification);
-
     await message.channel.send(embdData);
   }
 
@@ -46,7 +48,7 @@ export class BotHandler {
     if (message.author.bot) {
       return;
     }
-    const data = await this.prisma.data.findMany({ take: 5 });
+    const data = await this.prisma.data.findMany({ take: -5 });
     const embdData = this.botservice.checkMany(data);
     embdData.map(async (e) => await message.channel.send(e));
   }
@@ -56,7 +58,7 @@ export class BotHandler {
     if (message.author.bot) {
       return;
     }
-    const data = await this.prisma.data.findMany({ take: 10 });
+    const data = await this.prisma.data.findMany({ take: -10 });
     const embdData = this.botservice.checkMany(data);
     embdData.map(async (e) => await message.channel.send(e));
   }
