@@ -69,9 +69,6 @@ let BotService = class BotService {
                 },
             },
         });
-        console.log('====================================');
-        console.log(data);
-        console.log('====================================');
         const formetedData = this.formetData(data);
         formetedData.map(async (data) => {
             const notificationExist = await this.prisma.data.findMany({

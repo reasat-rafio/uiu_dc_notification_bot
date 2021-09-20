@@ -19,9 +19,17 @@ export class BotHandler {
 
   @Once({ event: 'ready' })
   start(): void {
+    //added servers
     console.log(
       this.discordProvider.getClient().guilds.cache.map((g) => g.name),
     );
+
+    this.discordProvider.getClient().user.setPresence({
+      activity: {
+        name: 'for !notice',
+        type: 'WATCHING',
+      },
+    });
     this.logger.log(`Logged in`);
   }
 

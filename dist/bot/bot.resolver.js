@@ -26,6 +26,12 @@ let BotHandler = BotHandler_1 = class BotHandler {
     }
     start() {
         console.log(this.discordProvider.getClient().guilds.cache.map((g) => g.name));
+        this.discordProvider.getClient().user.setPresence({
+            activity: {
+                name: 'for !notice',
+                type: 'WATCHING',
+            },
+        });
         this.logger.log(`Logged in`);
     }
     async scrapeAll() {
@@ -43,7 +49,7 @@ let BotHandler = BotHandler_1 = class BotHandler {
         if (message.author.bot) {
             return;
         }
-        const data = await this.prisma.data.findMany({ take: 5 });
+        const data = await this.prisma.data.findMany({ take: -5 });
         const embdData = this.botservice.checkMany(data);
         embdData.map(async (e) => await message.channel.send(e));
     }
@@ -51,7 +57,7 @@ let BotHandler = BotHandler_1 = class BotHandler {
         if (message.author.bot) {
             return;
         }
-        const data = await this.prisma.data.findMany({ take: 10 });
+        const data = await this.prisma.data.findMany({ take: -10 });
         const embdData = this.botservice.checkMany(data);
         embdData.map(async (e) => await message.channel.send(e));
     }
@@ -67,8 +73,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], BotHandler.prototype, "start", null);
 __decorate([
-    (0, schedule_1.Cron)('5 * * * * *'),
     (0, discord_nestjs_1.On)({ event: 'ready' }),
+    (0, schedule_1.Cron)('0 */30 * * * *'),
     (0, graphql_1.Mutation)('scrape'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
