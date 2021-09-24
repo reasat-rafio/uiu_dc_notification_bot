@@ -9,7 +9,7 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
-model Data {
+model Notice {
   id                Int            @id              @default(autoincrement())
   title             String
   content           String
@@ -17,5 +17,5 @@ model Data {
   createdDate       DateTime      @default(now())   @map("created_date")
 
   @@index([title])
-  @@map("data")
+  @@map("notice")
 }
