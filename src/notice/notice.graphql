@@ -1,4 +1,4 @@
-type ScrapData {
+type ScrapNoticeData {
   title: String
   slug: String
   content: String
@@ -9,9 +9,9 @@ input UpdateScrapingInput {
 }
 
 type Query {
-  scraping: ScrapData
+  scrapingNotice: ScrapNoticeData
 }
 
 type Mutation {
-  scrape: ScrapData
+  scrapeNotice: ScrapNoticeData
 }

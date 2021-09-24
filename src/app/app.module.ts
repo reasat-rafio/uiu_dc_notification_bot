@@ -1,5 +1,5 @@
 import { PrismaModule } from './../prisma/prisma.module';
-import { BotModule } from '../bot/bot.module';
+import { NoticeModule } from '../notice/notice.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -8,7 +8,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
-    BotModule,
+    NoticeModule,
     PrismaModule,
     ScheduleModule.forRoot(),
     GraphQLModule.forRoot({

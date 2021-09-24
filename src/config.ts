@@ -69,6 +69,7 @@ export default {
     github: '#6f7c7d',
     users: '#ffc200',
     help: '#4b2c5e',
+    error: '#cc0000',
   },
 
   thumbnails: {

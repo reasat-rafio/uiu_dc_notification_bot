@@ -1,9 +1,9 @@
 import { DiscordConfigService } from './environment/discord-config.service';
-import { BotHandler } from './bot.resolver';
+import { NoticeResolver } from './notice.resolver';
 import { Module } from '@nestjs/common';
 import { DiscordModule } from 'discord-nestjs';
 import { ConfigModule } from '@nestjs/config';
-import { BotService } from './bot.service';
+import { NoticeService } from './notice.service';
 import { NestCrawlerModule } from 'nest-crawler';
 
 @Module({
@@ -14,6 +14,6 @@ import { NestCrawlerModule } from 'nest-crawler';
       isGlobal: true,
     }),
   ],
-  providers: [BotHandler, DiscordConfigService, BotService],
+  providers: [NoticeResolver, DiscordConfigService, NoticeService],
 })
-export class BotModule {}
+export class NoticeModule {}
