@@ -33,18 +33,18 @@ export class NoticeResolver {
     this.logger.log(`Logged in`);
   }
 
-  // ? ON GOING FEATURES
   @On({ event: 'message' })
   async getText(message: Message) {
     if (message.author.bot) {
       return;
     }
-    // @TODO: change to --
+
     if (message.content.charAt(0) === '-') {
-      if (
-        message.content.includes('last') ||
-        message.content.includes('recent')
-      ) {
+      if (message.content === '-recent') {
+        return;
+      }
+
+      if (message.content.includes('last')) {
         const wantedVluesNum = +message.content.slice(
           5,
           message.content.length,
@@ -60,9 +60,9 @@ export class NoticeResolver {
 
           embdNotices.map(async (e) => await message.channel.send(e));
         } else {
-          const error =
+          const outOfDBLimitError =
             this.noticeService.recordLimitOutOfTheDBLimit(totalDataCount);
-          await message.channel.send(error);
+          await message.channel.send(outOfDBLimitError);
         }
       } else {
         const notValidError = this.noticeService.notValidCommand(
@@ -73,9 +73,8 @@ export class NoticeResolver {
     }
   }
 
-  @Cron('5 * * * * *')
+  @Cron('0 */30 * * * *')
   @On({ event: 'ready' })
-  // @Cron('0 */30 * * * *')
   @Mutation()
   async scrapeNotice() {
     return this.noticeService.scrape();
