@@ -49,7 +49,6 @@ export class NoticeService {
     );
     slug.map((e, index) => (result[index] = { ...result[index], slug: e }));
 
-    // ? removing this will show a unrelatable value that we dont want
     result.pop();
 
     return result;
@@ -73,7 +72,7 @@ export class NoticeService {
     const embed = defaultEmbed(config.colors.alerts)
       .setTitle(`${messages.title}`)
       .setDescription(
-        `👉 NOTICE! \n 
+        `👉 NOTICE! \n scrape
         ${messages.content}`,
       )
       .setTimestamp(messages.createdDate)

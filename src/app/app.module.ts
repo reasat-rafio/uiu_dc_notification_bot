@@ -9,9 +9,11 @@ import { DiscordConfigModule } from '../discord/discord.module';
 import { DiscordModule } from 'discord-nestjs';
 import { ConfigModule } from '@nestjs/config';
 import { DiscordConfigService } from '../discord/discord.service';
+import { NewsModule } from '../news/news.module';
 
 @Module({
   imports: [
+    NewsModule,
     NoticeModule,
     PrismaModule,
     DiscordConfigModule,
