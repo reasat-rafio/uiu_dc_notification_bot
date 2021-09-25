@@ -8,7 +8,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Client, DiscordClientProvider } from 'discord-nestjs';
 import { CreateScraping } from './dto/create-scraping.input';
 
-interface SData {
+interface NoticeScrappingData {
   title: string;
   content: string;
 }
@@ -24,7 +24,7 @@ export class NoticeService {
   @Client()
   discordProvider: DiscordClientProvider;
 
-  formetData = (data: SData): CreateScraping[] => {
+  formetNoticeData = (data: NoticeScrappingData): CreateScraping[] => {
     let title: string[] = [];
     let content: string[] = [];
     let slug: void | string[] = [];
@@ -36,8 +36,10 @@ export class NoticeService {
       .split('      ')
       .filter((e) => e);
     content = data.content.split('\n');
-    slug = title.map((e: string): string => slugify(e.toLowerCase()));
 
+    slug = title.map((e: string): string =>
+      slugify(e, { remove: /[*+~.()'"!:@]/g, lower: true, strict: true }),
+    );
     title.map(
       (e, index) => (result[index] = { ...result[index], title: e.trim() }),
     );
@@ -78,7 +80,7 @@ export class NoticeService {
   }
 
   async scrape(): Promise<void> {
-    const data: SData = await this.crawler.fetch({
+    const data: NoticeScrappingData = await this.crawler.fetch({
       target: 'https://www.uiu.ac.bd/notices',
       fetch: {
         title: {
@@ -90,7 +92,7 @@ export class NoticeService {
       },
     });
 
-    const formetedData: CreateScraping[] = this.formetData(data);
+    const formetedData: CreateScraping[] = this.formetNoticeData(data);
 
     formetedData.map(async (data): Promise<Notice> => {
       try {

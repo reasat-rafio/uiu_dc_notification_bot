@@ -24,7 +24,7 @@ model Notice {
 model Event {
   id                Int            @id              @default(autoincrement())
   title             String
-  vanue             String
+  venue             String
   date              String
   content           String
   slug              String
