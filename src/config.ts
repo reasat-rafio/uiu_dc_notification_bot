@@ -78,6 +78,7 @@ export default {
 
     outOfDBLimit:
       'https://res.cloudinary.com/dapjxqk64/image/upload/v1632505019/uiu_discord/flamenco-no-messages-1_ydq77g.png',
+    help: 'https://res.cloudinary.com/dapjxqk64/image/upload/v1632507839/uiu_discord/doodle-57_aavts1.png',
   },
 
   images: {

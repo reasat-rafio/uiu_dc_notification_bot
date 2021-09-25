@@ -47,7 +47,7 @@ export class AppService {
     const embedOutOfLimitErr = defaultEmbed(config.colors.error)
       .setTitle('~ Sad bot noise (╥_╥) ~')
       .setDescription(
-        `Currently I only have ${totalDataCount} records. I can't serve you more than that`,
+        `Currently I only have ${totalDataCount} records. I can't serve you more or less than that`,
       )
       .setThumbnail(config.thumbnails.outOfDBLimit);
 
@@ -59,7 +59,7 @@ export class AppService {
       .defaultEmbed(config.colors.error)
       .setTitle(`${message} is not a valid command`)
       .setDescription(
-        'availables commands are:\n 👉 -recent \n 👉 -notice<NUMBER> eg: -notice2 \n 👉 -news<NUMBER> eg: -news3 \n 👉 -event<NUMBER> eg: -event4',
+        'availables commands are:\n 👉 -help \n 👉 -recent \n 👉 -notice<NUMBER> eg: -notice2 \n 👉 -news<NUMBER> eg: -news3 \n 👉 -event<NUMBER> eg: -event4',
       )
       .setThumbnail(config.thumbnails.notValidCommand);
 

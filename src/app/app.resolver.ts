@@ -1,6 +1,7 @@
 import { Resolver } from '@nestjs/graphql';
-import { On } from 'discord-nestjs';
+import { On, OnCommand } from 'discord-nestjs';
 import { Message } from 'discord.js';
+import config from 'src/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AppService } from './app.service';
 
@@ -11,6 +12,19 @@ export class AppResolver {
     private readonly prisma: PrismaService,
   ) {}
 
+  @OnCommand({ name: 'help' })
+  async help(message: Message): Promise<void> {
+    await message.channel.send(
+      config
+        .defaultEmbed(config.colors.message)
+        .setTitle(`Hello there!`)
+        .setDescription(
+          'currently available commands : \n 👉 -help \n 👉 -recent \n 👉 -notice<NUMBER> eg: -notice2 \n 👉 -news<NUMBER> eg: -news3 \n 👉 -event<NUMBER> eg: -event4 \n\n Want to request a new feature or report a bug? Please knock me here: https://www.facebook.com/alreasat.rafio',
+        )
+        .setThumbnail(config.thumbnails.help),
+    );
+  }
+
   @On({ event: 'message' })
   async getText(message: Message) {
     if (message.author.bot) {
@@ -19,6 +33,10 @@ export class AppResolver {
 
     if (message.content.charAt(0) === '-') {
       if (message.content === '-recent') {
+        return;
+      }
+
+      if (message.content === '-help') {
         return;
       }
 
