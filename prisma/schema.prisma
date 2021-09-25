@@ -33,3 +33,14 @@ model Event {
   @@index([title])
   @@map("event")
 }
+
+model News {
+  id                Int            @id              @default(autoincrement())
+  title             String
+  content           String
+  slug              String
+  createdDate       DateTime      @default(now())   @map("created_date")
+
+  @@index([title])
+  @@map("news")
+}
