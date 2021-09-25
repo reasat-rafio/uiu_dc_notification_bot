@@ -14,7 +14,7 @@ export class NewsResolver {
   @Client()
   discordProvider: ClientProvider;
 
-  // @Cron('5 * * * * *')
+  @Cron('5 * * * * *')
   @Mutation('scrapeEvent')
   create() {
     return this.newsService.scrape();

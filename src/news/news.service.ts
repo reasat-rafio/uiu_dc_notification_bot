@@ -1,6 +1,7 @@
 import { News } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
-import { MessageEmbed } from 'discord.js';
+import { Client, DiscordClientProvider } from 'discord-nestjs';
+import { MessageEmbed, TextChannel } from 'discord.js';
 import { NestCrawlerService } from 'nest-crawler';
 import slugify from 'slugify';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -20,11 +21,38 @@ export class NewsService {
     private readonly crawler: NestCrawlerService,
     private readonly prisma: PrismaService,
   ) {}
+  @Client()
+  discordProvider: DiscordClientProvider;
 
   formetNoticeData = (data: NewsScrappingData): NewsScrappingData[] => {
+    let title: string[] = [];
+    let content: string[] = [];
+    let slug: void | string[] = [];
+
     const result = [];
 
     console.log(data);
+
+    title = data.title
+      .replace(/\r?\n|\r/g, ' ')
+      .split('      ')
+      .filter((e) => e);
+    title = title[0].split('\t\t\t');
+
+    content = data.content.split('Read More…');
+
+    slug = title.map((e: string): string =>
+      slugify(e, { remove: /[*+~.()'"!:@]/g, lower: true, strict: true }),
+    );
+    title.map(
+      (e, index) => (result[index] = { ...result[index], title: e.trim() }),
+    );
+    content.map(
+      (e, index) => (result[index] = { ...result[index], content: e.trim() }),
+    );
+    slug.map((e, index) => (result[index] = { ...result[index], slug: e }));
+
+    result.pop();
 
     return result;
   };
@@ -33,8 +61,8 @@ export class NewsService {
     const embed = defaultEmbed(config.colors.alerts)
       .setTitle(`${messages.title}`)
       .setDescription(
-        `👉 NOTICE! \n 
-            ${messages.content}`,
+        `👉 NEWS! \n 
+        ${messages.content}`,
       )
       .setTimestamp(messages.createdDate)
       .setURL(`https://www.uiu.ac.bd/news/${messages.slug}`)
@@ -52,11 +80,62 @@ export class NewsService {
           selector: '.entry-header',
         },
         content: {
-          selector: '.entry-content',
+          selector: '.entry-content p',
         },
       },
     });
 
-    console.log(data);
+    const formetedData: NewsScrappingData[] = this.formetNoticeData(data);
+
+    formetedData.map(async (data): Promise<News> => {
+      try {
+        const notificationExist = await this.prisma.news.findFirst({
+          where: {
+            title: data.title,
+          },
+        });
+        if (!notificationExist) {
+          try {
+            const newNotifications = await this.prisma.news.create({
+              data: {
+                title: data.title,
+                content: data.content,
+                slug: data.slug,
+              },
+            });
+
+            this.discordProvider
+              .getClient()
+              .guilds.cache.each(async (guild) => {
+                try {
+                  const channels: any = guild.channels.cache
+                    .filter((channel) => {
+                      return (
+                        channel.type === 'text' &&
+                        channel
+                          .permissionsFor(guild.me)
+                          .has(['VIEW_CHANNEL', 'SEND_MESSAGES'])
+                      );
+                    })
+                    .find((c) => c.name === 'general' || c.position === 0);
+
+                  if (channels) {
+                    const embdData = this.check(newNotifications);
+                    await (channels as TextChannel).send(embdData);
+                  }
+                } catch (error) {
+                  console.log(error);
+                }
+              });
+
+            return newNotifications;
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    });
   }
 }
