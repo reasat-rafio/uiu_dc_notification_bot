@@ -128,7 +128,7 @@ export class NewsService {
 
                   if (channels) {
                     const embdData = this.check(newNotifications);
-                    await (channels as TextChannel).send(embdData);
+                    // await (channels as TextChannel).send(embdData);
                   }
                 } catch (error) {
                   console.log(error);
