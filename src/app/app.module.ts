@@ -5,12 +5,21 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
+import { DiscordConfigModule } from '../discord/discord.module';
+import { DiscordModule } from 'discord-nestjs';
+import { ConfigModule } from '@nestjs/config';
+import { DiscordConfigService } from '../discord/discord.service';
 
 @Module({
   imports: [
     NoticeModule,
     PrismaModule,
+    DiscordConfigModule,
     ScheduleModule.forRoot(),
+    DiscordModule.forRootAsync({ useClass: DiscordConfigService }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     GraphQLModule.forRoot({
       typePaths: ['./**/*.graphql'],
     }),
