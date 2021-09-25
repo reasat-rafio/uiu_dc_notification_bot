@@ -60,9 +60,7 @@ export class NoticeService {
         .setTimestamp(d.createdDate)
         .setURL(`https://www.uiu.ac.bd/notices/${d.slug}`)
         .setAuthor('United International University', process.env.IMG_URL)
-        .setThumbnail(
-          config.images[Math.floor(Math.random() * config.images.length)],
-        ),
+        .setThumbnail(config.images.notice),
     );
 
     return embed;
