@@ -73,8 +73,9 @@ export class NoticeResolver {
     }
   }
 
-  @Cron('0 */30 * * * *')
+  @Cron('5 * * * * *')
   @On({ event: 'ready' })
+  // @Cron('0 */30 * * * *')
   @Mutation()
   async scrapeNotice() {
     return this.noticeService.scrape();

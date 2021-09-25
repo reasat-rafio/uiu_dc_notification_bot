@@ -14,6 +14,7 @@ interface NoticeScrappingData {
 }
 
 const { defaultEmbed } = config;
+
 @Injectable()
 export class NoticeService {
   constructor(
@@ -70,11 +71,15 @@ export class NoticeService {
 
   check(messages: Notice): MessageEmbed {
     const embed = defaultEmbed(config.colors.alerts)
-      .setTitle(messages.title)
-      .setDescription(messages.content)
+      .setTitle(`${messages.title}`)
+      .setDescription(
+        `👉 NOTICE! \n 
+        ${messages.content}`,
+      )
       .setTimestamp(messages.createdDate)
       .setURL(`https://www.uiu.ac.bd/notices/${messages.slug}`)
-      .setAuthor('United International University', process.env.IMG_URL);
+      .setAuthor('United International University', process.env.IMG_URL)
+      .setThumbnail(config.images.notice);
 
     return embed;
   }

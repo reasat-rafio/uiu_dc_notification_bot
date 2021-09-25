@@ -144,7 +144,9 @@ export class EventService {
     const embed = defaultEmbed(config.colors.alerts)
       .setTitle(`${messages.title}`)
       .setDescription(
-        `🕒 Date: ${messages.date} \n 
+        `
+        👉 EVENT! \n
+        🕒 Date: ${messages.date} \n 
         📍 Venue: ${messages.venue} \n
         ${messages.content}`,
       )
