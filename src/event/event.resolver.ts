@@ -16,7 +16,7 @@ export class EventResolver {
   @Client()
   discordProvider: ClientProvider;
 
-  @Cron('5 * * * * *')
+  @Cron('0 */30 * * * *')
   @Mutation('scrapeEvent')
   create() {
     return this.eventService.scrape();

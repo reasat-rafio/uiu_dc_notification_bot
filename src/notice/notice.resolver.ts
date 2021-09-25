@@ -33,9 +33,8 @@ export class NoticeResolver {
     this.logger.log(`Logged in`);
   }
 
-  @Cron('5 * * * * *')
+  @Cron('0 */30 * * * *')
   @On({ event: 'ready' })
-  // @Cron('0 */30 * * * *')
   @Mutation()
   async scrapeNotice() {
     return this.noticeService.scrape();
