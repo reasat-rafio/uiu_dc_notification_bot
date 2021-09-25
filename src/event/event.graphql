@@ -1,0 +1,15 @@
+type ScrapEventData {
+  title: String
+  slug: String
+  content: String
+  vanue: String
+  date: String
+}
+
+type Query {
+  scrapingEvent: ScrapEventData
+}
+
+type Mutation {
+  scrapeEvent: ScrapEventData
+}
