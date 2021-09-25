@@ -25,7 +25,7 @@ export class NewsResolver {
     if (message.author.bot) {
       return;
     }
-    const recentEvent = await this.prisma.event.findFirst({ take: -1 });
+    const recentEvent = await this.prisma.news.findFirst({ take: -1 });
     const embdData = this.newsService.check(recentEvent);
     await message.channel.send(embdData);
   }

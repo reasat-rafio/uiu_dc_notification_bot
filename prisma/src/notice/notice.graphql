@@ -4,10 +4,6 @@ type ScrapNoticeData {
   content: String
 }
 
-input UpdateScrapingInput {
-  id: Int!
-}
-
 type Query {
   scrapingNotice: ScrapNoticeData
 }

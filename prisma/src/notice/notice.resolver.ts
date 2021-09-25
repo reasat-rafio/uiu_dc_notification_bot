@@ -33,46 +33,6 @@ export class NoticeResolver {
     this.logger.log(`Logged in`);
   }
 
-  @On({ event: 'message' })
-  async getText(message: Message) {
-    if (message.author.bot) {
-      return;
-    }
-
-    if (message.content.charAt(0) === '-') {
-      if (message.content === '-recent') {
-        return;
-      }
-
-      if (message.content.includes('last')) {
-        const wantedVluesNum = +message.content.slice(
-          5,
-          message.content.length,
-        );
-        const totalDataCount = await this.prisma.notice.count({});
-
-        if (wantedVluesNum && wantedVluesNum <= totalDataCount) {
-          const notices = await this.prisma.notice.findMany({
-            take: -wantedVluesNum,
-          });
-
-          const embdNotices = this.noticeService.checkMany(notices);
-
-          embdNotices.map(async (e) => await message.channel.send(e));
-        } else {
-          const outOfDBLimitError =
-            this.noticeService.recordLimitOutOfTheDBLimit(totalDataCount);
-          await message.channel.send(outOfDBLimitError);
-        }
-      } else {
-        const notValidError = this.noticeService.notValidCommand(
-          message.content,
-        );
-        await message.channel.send(notValidError);
-      }
-    }
-  }
-
   @Cron('5 * * * * *')
   @On({ event: 'ready' })
   // @Cron('0 */30 * * * *')

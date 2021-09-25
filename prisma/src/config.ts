@@ -85,6 +85,6 @@ export default {
       'https://res.cloudinary.com/dapjxqk64/image/upload/v1632508241/uiu_discord/doodle-137_iqpvbd.png',
     notice:
       'https://res.cloudinary.com/dapjxqk64/image/upload/v1632507901/uiu_discord/doodle-45_nyrncx.png',
-    news: 'https://res.cloudinary.com/dapjxqk64/image/upload/v1632508266/uiu_discord/doodle-131_xbsahu.pngs',
+    news: 'https://res.cloudinary.com/dapjxqk64/image/upload/v1632507997/uiu_discord/doodle-90_ziour7.png',
   },
 };

@@ -1,31 +1,30 @@
-import { Notice } from '.prisma/client';
+import { News } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
-import { MessageEmbed, TextChannel } from 'discord.js';
-import config from '../config';
-import slugify from 'slugify';
-import { NestCrawlerService } from 'nest-crawler';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { Client, DiscordClientProvider } from 'discord-nestjs';
-import { CreateScraping } from './dto/create-scraping.input';
-
-interface NoticeScrappingData {
-  title: string;
-  content: string;
-}
+import { MessageEmbed, TextChannel } from 'discord.js';
+import { NestCrawlerService } from 'nest-crawler';
+import slugify from 'slugify';
+import { PrismaService } from 'src/prisma/prisma.service';
+import config from '../config';
 
 const { defaultEmbed } = config;
 
+interface NewsScrappingData {
+  title: string;
+  content: string;
+  slug?: string;
+}
+
 @Injectable()
-export class NoticeService {
+export class NewsService {
   constructor(
     private readonly crawler: NestCrawlerService,
     private readonly prisma: PrismaService,
   ) {}
-
   @Client()
   discordProvider: DiscordClientProvider;
 
-  formetNoticeData = (data: NoticeScrappingData): CreateScraping[] => {
+  formetNoticeData = (data: NewsScrappingData): NewsScrappingData[] => {
     let title: string[] = [];
     let content: string[] = [];
     let slug: void | string[] = [];
@@ -36,7 +35,9 @@ export class NoticeService {
       .replace(/\r?\n|\r/g, ' ')
       .split('      ')
       .filter((e) => e);
-    content = data.content.split('\n');
+    title = title[0].split('\t\t\t');
+
+    content = data.content.split('Read More…');
 
     slug = title.map((e: string): string =>
       slugify(e, { remove: /[*+~.()'"!:@]/g, lower: true, strict: true }),
@@ -54,60 +55,46 @@ export class NoticeService {
     return result;
   };
 
-  checkMany(messages: Notice[]): MessageEmbed[] {
-    const embed = messages.map((d) =>
-      defaultEmbed(config.colors.alerts)
-        .setTitle(d.title)
-        .setDescription(d.content)
-        .setTimestamp(d.createdDate)
-        .setURL(`https://www.uiu.ac.bd/notices/${d.slug}`)
-        .setAuthor('United International University', process.env.IMG_URL)
-        .setThumbnail(config.images.notice),
-    );
-
-    return embed;
-  }
-
-  check(messages: Notice): MessageEmbed {
+  check(messages: News): MessageEmbed {
     const embed = defaultEmbed(config.colors.alerts)
       .setTitle(`${messages.title}`)
       .setDescription(
-        `👉 NOTICE! \n scrape
+        `👉 NEWS! \n 
         ${messages.content}`,
       )
       .setTimestamp(messages.createdDate)
-      .setURL(`https://www.uiu.ac.bd/notices/${messages.slug}`)
+      .setURL(`https://www.uiu.ac.bd/news/${messages.slug}`)
       .setAuthor('United International University', process.env.IMG_URL)
-      .setThumbnail(config.images.notice);
+      .setThumbnail(config.images.news);
 
     return embed;
   }
 
   async scrape(): Promise<void> {
-    const data: NoticeScrappingData = await this.crawler.fetch({
-      target: 'https://www.uiu.ac.bd/notices',
+    const data: NewsScrappingData = await this.crawler.fetch({
+      target: 'https://www.uiu.ac.bd/?post_type=news',
       fetch: {
         title: {
           selector: '.entry-header',
         },
         content: {
-          selector: '.event-list-excerpt',
+          selector: '.entry-content p',
         },
       },
     });
 
-    const formetedData: CreateScraping[] = this.formetNoticeData(data);
+    const formetedData: NewsScrappingData[] = this.formetNoticeData(data);
 
-    formetedData.map(async (data): Promise<Notice> => {
+    formetedData.map(async (data): Promise<News> => {
       try {
-        const notificationExist = await this.prisma.notice.findFirst({
+        const notificationExist = await this.prisma.news.findFirst({
           where: {
             title: data.title,
           },
         });
         if (!notificationExist) {
           try {
-            const newNotifications = await this.prisma.notice.create({
+            const newNotifications = await this.prisma.news.create({
               data: {
                 title: data.title,
                 content: data.content,
@@ -148,26 +135,5 @@ export class NoticeService {
         console.log(err);
       }
     });
-  }
-
-  recordLimitOutOfTheDBLimit(totalDataCount: number) {
-    const embedOutOfLimitErr = defaultEmbed(config.colors.error)
-      .setTitle('~ Sad bot noise (╥_╥) ~')
-      .setDescription(
-        `Currently I only have ${totalDataCount} records. I can't serve you more than that`,
-      )
-      .setThumbnail(config.thumbnails.outOfDBLimit);
-
-    return embedOutOfLimitErr;
-  }
-
-  notValidCommand(message: string) {
-    const embedNotValidCmd = config
-      .defaultEmbed(config.colors.error)
-      .setTitle(`${message} is not a valid command`)
-      .setDescription('availables commands are:\nasdasd  \n \nasdas')
-      .setThumbnail(config.thumbnails.notValidCommand);
-
-    return embedNotValidCmd;
   }
 }

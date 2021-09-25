@@ -1,45 +1,42 @@
-import { News } from '.prisma/client';
+import { Notice } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
-import { Client, DiscordClientProvider } from 'discord-nestjs';
 import { MessageEmbed, TextChannel } from 'discord.js';
-import { NestCrawlerService } from 'nest-crawler';
-import slugify from 'slugify';
-import { PrismaService } from 'src/prisma/prisma.service';
 import config from '../config';
+import slugify from 'slugify';
+import { NestCrawlerService } from 'nest-crawler';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Client, DiscordClientProvider } from 'discord-nestjs';
+import { CreateScraping } from './dto/create-scraping.input';
+
+interface NoticeScrappingData {
+  title: string;
+  content: string;
+}
 
 const { defaultEmbed } = config;
 
-interface NewsScrappingData {
-  title: string;
-  content: string;
-  slug?: string;
-}
-
 @Injectable()
-export class NewsService {
+export class NoticeService {
   constructor(
     private readonly crawler: NestCrawlerService,
     private readonly prisma: PrismaService,
   ) {}
+
   @Client()
   discordProvider: DiscordClientProvider;
 
-  formetNoticeData = (data: NewsScrappingData): NewsScrappingData[] => {
+  formetNoticeData = (data: NoticeScrappingData): CreateScraping[] => {
     let title: string[] = [];
     let content: string[] = [];
     let slug: void | string[] = [];
 
     const result = [];
 
-    console.log(data);
-
     title = data.title
       .replace(/\r?\n|\r/g, ' ')
       .split('      ')
       .filter((e) => e);
-    title = title[0].split('\t\t\t');
-
-    content = data.content.split('Read More…');
+    content = data.content.split('\n');
 
     slug = title.map((e: string): string =>
       slugify(e, { remove: /[*+~.()'"!:@]/g, lower: true, strict: true }),
@@ -52,51 +49,66 @@ export class NewsService {
     );
     slug.map((e, index) => (result[index] = { ...result[index], slug: e }));
 
+    // ? removing this will show a unrelatable value that we dont want
     result.pop();
 
     return result;
   };
 
-  check(messages: News): MessageEmbed {
+  checkMany(messages: Notice[]): MessageEmbed[] {
+    const embed = messages.map((d) =>
+      defaultEmbed(config.colors.alerts)
+        .setTitle(d.title)
+        .setDescription(d.content)
+        .setTimestamp(d.createdDate)
+        .setURL(`https://www.uiu.ac.bd/notices/${d.slug}`)
+        .setAuthor('United International University', process.env.IMG_URL)
+        .setThumbnail(config.images.notice),
+    );
+
+    return embed;
+  }
+
+  check(messages: Notice): MessageEmbed {
     const embed = defaultEmbed(config.colors.alerts)
       .setTitle(`${messages.title}`)
       .setDescription(
-        `👉 NEWS! \n 
+        `👉 NOTICE! \n 
         ${messages.content}`,
       )
       .setTimestamp(messages.createdDate)
-      .setURL(`https://www.uiu.ac.bd/news/${messages.slug}`)
+      .setURL(`https://www.uiu.ac.bd/notices/${messages.slug}`)
       .setAuthor('United International University', process.env.IMG_URL)
-      .setThumbnail(config.images.news);
+      .setThumbnail(config.images.notice);
 
     return embed;
   }
 
   async scrape(): Promise<void> {
-    const data: NewsScrappingData = await this.crawler.fetch({
-      target: 'https://www.uiu.ac.bd/?post_type=news',
+    const data: NoticeScrappingData = await this.crawler.fetch({
+      target: 'https://www.uiu.ac.bd/notices',
       fetch: {
         title: {
           selector: '.entry-header',
         },
         content: {
-          selector: '.entry-content p',
+          selector: '.event-list-excerpt',
         },
       },
     });
 
-    const formetedData: NewsScrappingData[] = this.formetNoticeData(data);
+    const formetedData: CreateScraping[] = this.formetNoticeData(data);
 
-    formetedData.map(async (data): Promise<News> => {
+    formetedData.map(async (data): Promise<Notice> => {
       try {
-        const notificationExist = await this.prisma.news.findFirst({
+        const notificationExist = await this.prisma.notice.findFirst({
           where: {
             title: data.title,
           },
         });
         if (!notificationExist) {
           try {
-            const newNotifications = await this.prisma.news.create({
+            const newNotifications = await this.prisma.notice.create({
               data: {
                 title: data.title,
                 content: data.content,
