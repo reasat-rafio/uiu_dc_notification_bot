@@ -4,8 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { Event } from '@prisma/client';
 import { NestCrawlerService } from 'nest-crawler';
 import slugify from 'slugify';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateEventInput } from './dto/create-event.input';
+import { PrismaService } from '../prisma/prisma.service';
 import config from '../config';
 
 interface EventScrappingData {
@@ -53,9 +52,16 @@ export class EventService {
     title.map(
       (e, index) => (result[index] = { ...result[index], title: e.trim() }),
     );
-    content.map(
-      (e, index) => (result[index] = { ...result[index], content: e.trim() }),
-    );
+    content.map((e, index) => {
+      if (e.includes('Share This')) {
+        return (result[index] = {
+          ...result[index],
+          content: e.slice('Share This'.length + 1, e.trim().length).trim(),
+        });
+      }
+
+      return (result[index] = { ...result[index], content: e.trim() });
+    });
     slug.map((e, index) => (result[index] = { ...result[index], slug: e }));
     date.map(
       (e, index) => (result[index] = { ...result[index], date: e.trim() }),

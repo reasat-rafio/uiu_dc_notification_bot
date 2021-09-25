@@ -4,7 +4,7 @@ import { Client, DiscordClientProvider } from 'discord-nestjs';
 import { MessageEmbed, TextChannel } from 'discord.js';
 import { NestCrawlerService } from 'nest-crawler';
 import slugify from 'slugify';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import config from '../config';
 
 const { defaultEmbed } = config;
@@ -45,9 +45,17 @@ export class NewsService {
     title.map(
       (e, index) => (result[index] = { ...result[index], title: e.trim() }),
     );
-    content.map(
-      (e, index) => (result[index] = { ...result[index], content: e.trim() }),
-    );
+    content.map((e, index) => {
+      if (e.includes('Continue reading')) {
+        return (result[index] = {
+          ...result[index],
+          content: e
+            .slice('Continue reading'.length + 1, e.trim().length)
+            .trim(),
+        });
+      }
+      return (result[index] = { ...result[index], content: e.trim() });
+    });
     slug.map((e, index) => (result[index] = { ...result[index], slug: e }));
 
     result.pop();

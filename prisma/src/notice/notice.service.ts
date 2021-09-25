@@ -4,7 +4,7 @@ import { MessageEmbed, TextChannel } from 'discord.js';
 import config from '../config';
 import slugify from 'slugify';
 import { NestCrawlerService } from 'nest-crawler';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Client, DiscordClientProvider } from 'discord-nestjs';
 import { CreateScraping } from './dto/create-scraping.input';
 
@@ -44,12 +44,18 @@ export class NoticeService {
     title.map(
       (e, index) => (result[index] = { ...result[index], title: e.trim() }),
     );
-    content.map(
-      (e, index) => (result[index] = { ...result[index], content: e.trim() }),
-    );
+    content.map((e, index) => {
+      if (e.includes('Share This')) {
+        return (result[index] = {
+          ...result[index],
+          content: e.slice('Share This'.length + 1, e.trim().length).trim(),
+        });
+      }
+
+      return (result[index] = { ...result[index], content: e.trim() });
+    });
     slug.map((e, index) => (result[index] = { ...result[index], slug: e }));
 
-    // ? removing this will show a unrelatable value that we dont want
     result.pop();
 
     return result;
