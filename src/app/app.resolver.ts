@@ -1,7 +1,7 @@
 import { Resolver } from '@nestjs/graphql';
 import { On } from 'discord-nestjs';
 import { Message } from 'discord.js';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { AppService } from './app.service';
 
 @Resolver()

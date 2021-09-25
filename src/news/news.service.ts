@@ -45,6 +45,7 @@ export class NewsService {
     title.map(
       (e, index) => (result[index] = { ...result[index], title: e.trim() }),
     );
+
     content.map((e, index) => {
       if (e.includes('Continue reading')) {
         return (result[index] = {
