@@ -1,8 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
 import { Resolver } from '@nestjs/graphql';
 import { On } from 'discord-nestjs';
 import { Message } from 'discord.js';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { AppService } from './app.service';
 
 @Resolver()
@@ -40,7 +39,9 @@ export class AppResolver {
             take: -wantedVluesNum,
           });
 
-          const embdNotices = this.appService.checkMany(notices, 'NOTICE!!');
+          const embdNotices = this.appService
+            .checkMany(notices, 'NOTICE!!')
+            .reverse();
 
           embdNotices.map(async (e) => await message.channel.send(e));
         } else {
@@ -56,13 +57,13 @@ export class AppResolver {
         const totalNewsCount = await this.prisma.news.count({});
 
         if (wantedVluesNum && wantedVluesNum <= totalNewsCount) {
-          const news = await this.prisma.notice.findMany({
+          const news = await this.prisma.news.findMany({
             take: -wantedVluesNum,
           });
 
-          const embdNotices = this.appService.checkMany(news, 'NEWS!!');
+          const embdNews = this.appService.checkMany(news, 'NEWS!!').reverse();
 
-          embdNotices.map(async (e) => await message.channel.send(e));
+          embdNews.map(async (e) => await message.channel.send(e));
         } else {
           const outOfDBLimitError =
             this.appService.recordLimitOutOfTheDBLimit(totalNewsCount);
@@ -73,16 +74,18 @@ export class AppResolver {
           'event'.length + 1,
           message.content.length,
         );
-        const totalEventCount = await this.prisma.news.count({});
+        const totalEventCount = await this.prisma.event.count({});
 
         if (wantedVluesNum && wantedVluesNum <= totalEventCount) {
-          const event = await this.prisma.news.findMany({
+          const event = await this.prisma.event.findMany({
             take: -wantedVluesNum,
           });
 
-          const embdNotices = this.appService.checkMany(event, 'EVENTS!!');
+          const embdEvents = this.appService
+            .checkMany(event, 'EVENTS!!')
+            .reverse();
 
-          embdNotices.map(async (e) => await message.channel.send(e));
+          embdEvents.map(async (e) => await message.channel.send(e));
         } else {
           const outOfDBLimitError =
             this.appService.recordLimitOutOfTheDBLimit(totalEventCount);
