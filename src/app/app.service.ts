@@ -43,6 +43,35 @@ export class AppService {
     return embed;
   }
 
+  // updateMsg() {
+  //   return defaultEmbed(config.colors.alerts)
+  //     .setTitle('UPDATE AND CHANGES!')
+  //     .setDescription(
+  //       `
+  //     Newly added:\n
+  //     currently, the bot not only checks for notice but also checks for news and events from the UIU website.\n
+  //     \n
+  //     changes:\n
+  //     ~~ The command prefix is now - (single hyphen) instead of -- (double hyphen)
+  //     -recent will now return the recent news, notice, and events from the UIU website\n
+  //     ~~ -last5 and -last10 command has been removed. Now you specify why you want (notice, event, or news) and the quantity eg: -notice3, -news2. This will return the last 3 notices or 2 news\n
+  //     \n
+  //     Currently available commands:\n
+  //     -help\n
+  //     -recent\n
+  //     -notice<NUMBER> eg: -notice2\n
+  //     -news<NUMBER> eg: -news3\n
+  //     -EVENT<NUMBER> EG: -EVENT4\n
+  //     \n
+  //     YOU DO NOT NEED TO CALL COMMANDS EVERY TIME. THE BOT WILL SEND AN AUTOMATED MESSAGE WHEN THERE IS A NEW NOTICE, NEWS, OR EVENT.\n
+  //     I am aware of the bot not sending the response in the right order now. This issue will fix eventually when there will be new content added to the UIU website. I am too lazy to fix it manually.\n
+  //     \n
+  //     Hope this serves a purpose haha. Thank you`,
+  //     )
+  //     .setAuthor('United International University', process.env.IMG_URL)
+  //     .setThumbnail(config.thumbnails.update);
+  // }
+
   recordLimitOutOfTheDBLimit(totalDataCount: number) {
     const embedOutOfLimitErr = defaultEmbed(config.colors.error)
       .setTitle('~ Sad bot noise (╥_╥) ~')

@@ -1,6 +1,6 @@
 import { PrismaService } from '../prisma/prisma.service';
-import { Injectable, Logger } from '@nestjs/common';
-import { Client, ClientProvider, On, Once, OnCommand } from 'discord-nestjs';
+import { Injectable } from '@nestjs/common';
+import { Client, ClientProvider, On, OnCommand } from 'discord-nestjs';
 import { Message } from 'discord.js';
 import { NoticeService } from './notice.service';
 import { Cron } from '@nestjs/schedule';
@@ -8,7 +8,6 @@ import { Mutation } from '@nestjs/graphql';
 
 @Injectable()
 export class NoticeResolver {
-  private readonly logger = new Logger(NoticeResolver.name);
   constructor(
     private readonly prisma: PrismaService,
     private readonly noticeService: NoticeService,
@@ -16,22 +15,6 @@ export class NoticeResolver {
 
   @Client()
   discordProvider: ClientProvider;
-
-  @Once({ event: 'ready' })
-  start(): void {
-    //added servers
-    console.log(
-      this.discordProvider.getClient().guilds.cache.map((g) => g.name),
-    );
-
-    this.discordProvider.getClient().user.setPresence({
-      activity: {
-        name: 'for !notice',
-        type: 'WATCHING',
-      },
-    });
-    this.logger.log(`Logged in`);
-  }
 
   @Cron('0 */30 * * * *')
   @On({ event: 'ready' })

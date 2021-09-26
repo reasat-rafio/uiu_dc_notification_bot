@@ -1,6 +1,7 @@
+import { Logger } from '@nestjs/common';
 import { Resolver } from '@nestjs/graphql';
-import { On, OnCommand } from 'discord-nestjs';
-import { Message } from 'discord.js';
+import { Client, ClientProvider, On, Once, OnCommand } from 'discord-nestjs';
+import { Message, TextChannel } from 'discord.js';
 import config from 'src/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AppService } from './app.service';
@@ -11,6 +12,49 @@ export class AppResolver {
     private readonly appService: AppService,
     private readonly prisma: PrismaService,
   ) {}
+
+  private readonly logger = new Logger(AppResolver.name);
+
+  @Client()
+  discordProvider: ClientProvider;
+
+  @Once({ event: 'ready' })
+  start(): void {
+    //added servers
+    console.log(
+      this.discordProvider.getClient().guilds.cache.map((g) => g.name),
+    );
+
+    this.discordProvider.getClient().user.setPresence({
+      activity: {
+        name: 'for !notice',
+        type: 'WATCHING',
+      },
+    });
+    this.logger.log(`Logged in`);
+
+    // this.discordProvider.getClient().guilds.cache.each(async (guild) => {
+    //   try {
+    //     const channels: any = guild.channels.cache
+    //       .filter((channel) => {
+    //         return (
+    //           channel.type === 'text' &&
+    //           channel
+    //             .permissionsFor(guild.me)
+    //             .has(['VIEW_CHANNEL', 'SEND_MESSAGES'])
+    //         );
+    //       })
+    //       .find((c) => c.name === 'general' || c.position === 0);
+
+    //     if (channels) {
+    //       const embdData = this.appService.updateMsg();
+    //       await (channels as TextChannel).send(embdData);
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // });
+  }
 
   @OnCommand({ name: 'help' })
   async help(message: Message): Promise<void> {
