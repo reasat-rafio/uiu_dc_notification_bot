@@ -24,23 +24,25 @@
 
 ## Description
 
-A dedicated discord bot for uiu students. The idea is simple, this bot will notify you on the chat when ever there is a new notice from the authority.
+A dedicated discord bot for uiu students. The idea is simple, this bot will notify you on the chat when ever there is a new notice, news or event from the authority.
 
 ## Prefix
 
 ```bash
---
+-
 ```
 
 ## Commands
 
 ```bash
-# get the last notification
---recent
+# know about the available commands
+-help
 
-# get the last 5 notifications
---last5
+# get the revcent news, notice, and events from the UIU website
+-recent
 
-# get the last 10 notifications
---last10
+# get the last specific amount of notice news or events
+-notice<NUMBER> eg: -notice2
+-news<NUMBER> eg: -news3
+-event<NUMBER> EG: -event4
 ```
