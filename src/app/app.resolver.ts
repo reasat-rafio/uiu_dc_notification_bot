@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { Resolver } from '@nestjs/graphql';
 import { Client, ClientProvider, On, Once, OnCommand } from 'discord-nestjs';
-import { Message, TextChannel } from 'discord.js';
+import { Message } from 'discord.js';
 import config from 'src/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AppService } from './app.service';
@@ -31,8 +31,8 @@ export class AppResolver {
         type: 'WATCHING',
       },
     });
-    this.logger.log(`Logged in`);
 
+    // ?UPDATE MESSAGE
     // this.discordProvider.getClient().guilds.cache.each(async (guild) => {
     //   try {
     //     const channels: any = guild.channels.cache
@@ -54,6 +54,8 @@ export class AppResolver {
     //     console.log(error);
     //   }
     // });
+
+    this.logger.log(`Logged in`);
   }
 
   @OnCommand({ name: 'help' })
