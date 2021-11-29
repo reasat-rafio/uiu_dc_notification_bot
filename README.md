@@ -46,3 +46,5 @@ A dedicated discord bot for uiu students. The idea is simple, this bot will noti
 -news<NUMBER> eg: -news3
 -event<NUMBER> EG: -event4
 ```
+
+[Add the bot to your server](https://discord.com/oauth2/authorize?client_id=878298815499755620&scope=bot&fbclid=IwAR3hQzgDK8upoy4n_f51d05fFvgvpqIrQgKQC156IBHCLNQw6wEd9pKIb2E)
