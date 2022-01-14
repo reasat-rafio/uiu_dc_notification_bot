@@ -80,7 +80,9 @@ export class NoticeService {
       .setTitle(`${messages.title}`)
       .setDescription(
         `👉 NOTICE! \n 
-        ${messages.content}`,
+        ${messages.content}\n
+        \n
+        ℹ️ Created by [Al Reasat Rafio](https://github.com/reasat-rafio)`,
       )
       .setTimestamp(messages.createdDate)
       .setURL(`https://www.uiu.ac.bd/notices/${messages.slug}`)

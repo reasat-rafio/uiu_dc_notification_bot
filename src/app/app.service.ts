@@ -32,7 +32,9 @@ export class AppService {
         .setTitle(d.title)
         .setDescription(
           `👉 ${to} \n 
-          ${d.content}`,
+          ${d.content} \n
+          \n
+        ℹ️ Created by [Al Reasat Rafio](https://github.com/reasat-rafio)`,
         )
         .setTimestamp(d.createdDate)
         .setURL(`https://www.uiu.ac.bd/notices/${d.slug}`)
@@ -59,7 +61,7 @@ export class AppService {
     const embedOutOfLimitErr = defaultEmbed(config.colors.error)
       .setTitle('~ Sad bot noise (╥_╥) ~')
       .setDescription(
-        `Currently I only have ${totalDataCount} records. I can't serve you more or less than that`,
+        `Currently I only have ${totalDataCount} records. I can't serve you more than that`,
       )
       .setThumbnail(config.thumbnails.outOfDBLimit);
 

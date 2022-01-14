@@ -161,10 +161,7 @@ export class EventService {
       )
       .setTimestamp(messages.createdDate)
       .setURL(`https://www.uiu.ac.bd/events/${messages.slug}`)
-      .setAuthor(
-        'United International University',
-        'https://res.cloudinary.com/dapjxqk64/image/upload/v1642161786/external-content.duckduckgo.com_ypj0fv.png',
-      )
+      .setAuthor('United International University', process.env.IMG_URL)
       .setThumbnail(config.images.event);
 
     return embed;

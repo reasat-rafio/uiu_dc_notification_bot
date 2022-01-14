@@ -69,7 +69,10 @@ export class NewsService {
       .setTitle(`${messages.title}`)
       .setDescription(
         `👉 NEWS! \n 
-        ${messages.content}`,
+        ${messages.content}\n
+        \n
+        ℹ️ Created by [Al Reasat Rafio](https://github.com/reasat-rafio)
+        `,
       )
       .setTimestamp(messages.createdDate)
       .setURL(`https://www.uiu.ac.bd/news/${messages.slug}`)
