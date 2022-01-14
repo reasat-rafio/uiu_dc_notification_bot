@@ -154,11 +154,17 @@ export class EventService {
         👉 EVENT! \n
         🕒 Date: ${messages.date} \n 
         📍 Venue: ${messages.venue} \n
-        ${messages.content}`,
+        ${messages.content}\n
+        \n
+        ℹ️ Created by [Al Reasat Rafio](https://github.com/reasat-rafio)
+        `,
       )
       .setTimestamp(messages.createdDate)
       .setURL(`https://www.uiu.ac.bd/events/${messages.slug}`)
-      .setAuthor('United International University', process.env.IMG_URL)
+      .setAuthor(
+        'United International University',
+        'https://res.cloudinary.com/dapjxqk64/image/upload/v1642161786/external-content.duckduckgo.com_ypj0fv.png',
+      )
       .setThumbnail(config.images.event);
 
     return embed;
